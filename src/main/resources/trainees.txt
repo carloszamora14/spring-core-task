@@ -1,0 +1,2 @@
+1,John,Doe,johndoe,password123,true,1995-05-20,123 Main St
+2,Jane,Smith,janesmith,secure456,true,1990-10-15,456 Oak Ave

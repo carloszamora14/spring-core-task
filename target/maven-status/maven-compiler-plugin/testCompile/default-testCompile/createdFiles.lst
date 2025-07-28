@@ -1,0 +1,6 @@
+com\example\springcore\storage\InMemoryStorageImplTest.class
+com\example\springcore\dao\TraineeDaoTest.class
+com\example\springcore\dao\TrainerDaoTest.class
+com\example\springcore\service\TrainerServiceTest.class
+com\example\springcore\service\TrainingServiceTest.class
+com\example\springcore\dao\TrainingDaoTest.class

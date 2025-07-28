@@ -1,0 +1,2 @@
+1,1,1,Cardio Training,2024-07-20T10:00,PT1H
+2,2,2,Yoga Session,2024-07-22T09:00,PT1H30M
