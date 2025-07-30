@@ -26,12 +26,11 @@ public class TrainingDaoTest {
 
     @Test
     void testCreate() {
-        TrainingType trainingType = new TrainingType("Yoga");
         Training training = Training.builder()
                 .id(1L)
                 .trainerId(10L)
                 .traineeId(20L)
-                .trainingType(trainingType)
+                .trainingType(TrainingType.YOGA)
                 .build();
 
         when(trainingStorage.save(training)).thenReturn(training);
@@ -45,12 +44,11 @@ public class TrainingDaoTest {
 
     @Test
     void testUpdate() {
-        TrainingType trainingType = new TrainingType("Yoga");
         Training training = Training.builder()
                 .id(1L)
                 .trainerId(10L)
                 .traineeId(20L)
-                .trainingType(trainingType)
+                .trainingType(TrainingType.YOGA)
                 .build();
 
         when(trainingStorage.save(training)).thenReturn(training);
@@ -58,7 +56,7 @@ public class TrainingDaoTest {
         Training result = trainingDao.update(training);
 
         assertNotNull(result);
-        assertEquals(trainingType, result.getTrainingType());
+        assertEquals(TrainingType.YOGA, result.getTrainingType());
         verify(trainingStorage, times(1)).save(training);
     }
 
@@ -138,21 +136,17 @@ public class TrainingDaoTest {
 
     @Test
     void testGetByTrainingType() {
-        TrainingType cardio = new TrainingType("Cardio");
-        TrainingType strength = new TrainingType("Strength");
-        TrainingType flexibility = new TrainingType("Flexibility");
-
-        Training t1 = Training.builder().trainingType(cardio).build();
-        Training t2 = Training.builder().trainingType(strength).build();
-        Training t3 = Training.builder().trainingType(cardio).build();
-        Training t4 = Training.builder().trainingType(flexibility).build();
+        Training t1 = Training.builder().trainingType(TrainingType.CARDIO).build();
+        Training t2 = Training.builder().trainingType(TrainingType.STRENGTH).build();
+        Training t3 = Training.builder().trainingType(TrainingType.CARDIO).build();
+        Training t4 = Training.builder().trainingType(TrainingType.FLEXIBILITY).build();
 
         when(trainingStorage.findAll()).thenReturn(List.of(t1, t2, t3, t4));
 
-        List<Training> result = trainingDao.getByTrainingType(cardio);
+        List<Training> result = trainingDao.getByTrainingType(TrainingType.CARDIO);
 
         assertEquals(2, result.size());
-        assertTrue(result.stream().allMatch(t -> t.getTrainingType().equals(cardio)));
+        assertTrue(result.stream().allMatch(t -> t.getTrainingType().equals(TrainingType.CARDIO)));
         verify(trainingStorage, times(1)).findAll();
     }
 }

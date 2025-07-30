@@ -24,18 +24,15 @@ public class TrainingStorage extends InMemoryStorageImpl<Training> {
                 Objects.requireNonNull(getClass().getResourceAsStream(filePath.replace("classpath:", "/")))))) {
             reader.lines().forEach(line -> {
                 String[] tokens = line.split(",");
-                if (tokens.length >= 6) {
-                    TrainingType type = new TrainingType();
-                    type.setName(tokens[3]);
-
+                if (tokens.length >= 7) {
                     Training training = Training.builder()
                             .id(Long.parseLong(tokens[0]))
                             .traineeId(Long.parseLong(tokens[1]))
                             .trainerId(Long.parseLong(tokens[2]))
-                            .trainingType(type)
-                            .trainingName(tokens[3])
-                            .date(LocalDateTime.parse(tokens[4]))
-                            .duration(Duration.parse(tokens[5]))
+                            .trainingType(TrainingType.valueOf(tokens[3]))
+                            .trainingName(tokens[4])
+                            .date(LocalDateTime.parse(tokens[5]))
+                            .duration(Duration.parse(tokens[6]))
                             .build();
                     save(training);
                 }

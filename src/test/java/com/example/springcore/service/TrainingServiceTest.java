@@ -165,15 +165,14 @@ public class TrainingServiceTest {
 
     @Test
     void testGetByTrainingType() {
-        TrainingType type = new TrainingType("Strength");
-        Training t1 = Training.builder().id(1L).trainingType(type).build();
-        Training t2 = Training.builder().id(2L).trainingType(type).build();
+        Training t1 = Training.builder().id(1L).trainingType(TrainingType.STRENGTH).build();
+        Training t2 = Training.builder().id(2L).trainingType(TrainingType.STRENGTH).build();
 
-        when(trainingDao.getByTrainingType(type)).thenReturn(List.of(t1, t2));
+        when(trainingDao.getByTrainingType(TrainingType.STRENGTH)).thenReturn(List.of(t1, t2));
 
-        List<Training> result = trainingService.getByTrainingType(type);
+        List<Training> result = trainingService.getByTrainingType(TrainingType.STRENGTH);
 
         assertEquals(2, result.size());
-        verify(trainingDao, times(1)).getByTrainingType(type);
+        verify(trainingDao, times(1)).getByTrainingType(TrainingType.STRENGTH);
     }
 }
