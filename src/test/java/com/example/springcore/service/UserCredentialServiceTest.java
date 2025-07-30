@@ -40,6 +40,24 @@ public class UserCredentialServiceTest {
     }
 
     @Test
+    public void testGenerateUniqueUsername_withNullFirstName() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> credentialService.generateUniqueUsername(null, "Smith")
+        );
+        assertEquals("First name and last name cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerateUniqueUsername_withNullLastName() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> credentialService.generateUniqueUsername("John", null)
+        );
+        assertEquals("First name and last name cannot be null", exception.getMessage());
+    }
+
+    @Test
     public void testGenerateUniqueUsername_usernameTaken() {
         Trainee existingTrainee = new Trainee();
         existingTrainee.setUsername("pedro.diaz");
@@ -94,11 +112,49 @@ public class UserCredentialServiceTest {
     }
 
     @Test
-    public void testGenerateRandomPassword_lengthAndChars() {
+    public void testUpdateUsername_withNullNewUser() {
+        User existing = new Trainee();
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> credentialService.updateUsername(null, existing)
+        );
+        assertEquals("User data cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateUsername_withNullExistingUser() {
+        User newUser = new Trainee();
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> credentialService.updateUsername(newUser, null)
+        );
+        assertEquals("User data cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerateRandomPassword() {
         String password = credentialService.generateRandomPassword(10);
 
         assertNotNull(password);
         assertEquals(10, password.length());
         assertTrue(password.matches("[A-Za-z0-9]+"));
+    }
+
+    @Test
+    public void testGenerateRandomPassword_withZeroLength() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> credentialService.generateRandomPassword(0)
+        );
+        assertEquals("Password length must be greater than 0", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerateRandomPassword_withNegativeLength() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> credentialService.generateRandomPassword(-5)
+        );
+        assertEquals("Password length must be greater than 0", exception.getMessage());
     }
 }

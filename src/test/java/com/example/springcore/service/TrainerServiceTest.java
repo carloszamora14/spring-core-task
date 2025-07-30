@@ -27,7 +27,7 @@ public class TrainerServiceTest {
     private TrainerService trainerService;
 
     @Test
-    void testCreate() {
+    public void testCreate() {
         Trainer trainer = Trainer.builder()
                 .firstName("Bob")
                 .lastName("Brown")
@@ -59,7 +59,15 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testUpdate_existingTrainer() {
+    public void testCreate_withNullTrainer() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            trainerService.create(null);
+        });
+        assertEquals("Trainer cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdate_existingTrainer() {
         Trainer existing = Trainer.builder()
                 .id(1L)
                 .firstName("Bob")
@@ -85,7 +93,7 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testUpdate_nonExistingTrainer() {
+    public void testUpdate_nonExistingTrainer() {
         Trainer trainer = Trainer.builder()
                 .id(1L)
                 .build();
@@ -101,7 +109,15 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testDeleteById_found() {
+    public void testUpdate_withNullTrainer() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            trainerService.update(null);
+        });
+        assertEquals("Trainer cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteById_found() {
         Trainer trainer = Trainer.builder().id(1L).build();
 
         when(trainerDao.deleteById(1L)).thenReturn(trainer);
@@ -112,7 +128,7 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testDeleteById_notFound() {
+    public void testDeleteById_notFound() {
         when(trainerDao.deleteById(1L)).thenReturn(null);
 
         trainerService.deleteById(1L);
@@ -121,7 +137,7 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testGetById_found() {
+    public void testGetById_found() {
         Trainer trainer = Trainer.builder().id(1L).build();
 
         when(trainerDao.getById(1L)).thenReturn(Optional.of(trainer));
@@ -134,7 +150,7 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testGetById_notFound() {
+    public void testGetById_notFound() {
         when(trainerDao.getById(1L)).thenReturn(Optional.empty());
 
         Optional<Trainer> result = trainerService.getById(1L);
@@ -144,7 +160,7 @@ public class TrainerServiceTest {
     }
 
     @Test
-    void testGetAll() {
+    public void testGetAll() {
         Trainer t1 = Trainer.builder().id(1L).build();
         Trainer t2 = Trainer.builder().id(2L).build();
 

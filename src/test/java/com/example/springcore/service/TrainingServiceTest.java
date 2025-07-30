@@ -25,7 +25,7 @@ public class TrainingServiceTest {
     private TrainingService trainingService;
 
     @Test
-    void testCreate() {
+    public void testCreate() {
         Training training = Training.builder()
                 .trainingName("Yoga")
                 .build();
@@ -47,7 +47,15 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testUpdate_found() {
+    public void testCreate_withNullTraining() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            trainingService.create(null);
+        });
+        assertEquals("Training cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdate_found() {
         Training training = Training.builder()
                 .id(1L)
                 .trainingName("Pilates")
@@ -64,7 +72,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testUpdate_notFound() {
+    public void testUpdate_notFound() {
         Training training = Training.builder()
                 .id(1L)
                 .trainingName("Pilates")
@@ -79,7 +87,15 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testDeleteById_found() {
+    public void testUpdate_withNullTraining() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            trainingService.update(null);
+        });
+        assertEquals("Training cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteById_found() {
         Training training = Training.builder().id(1L).build();
 
         when(trainingDao.deleteById(1L)).thenReturn(training);
@@ -90,7 +106,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testDeleteById_notFound() {
+    public void testDeleteById_notFound() {
         when(trainingDao.deleteById(1L)).thenReturn(null);
 
         trainingService.deleteById(1L);
@@ -99,7 +115,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testGetById_found() {
+    public void testGetById_found() {
         Training training = Training.builder().id(1L).build();
 
         when(trainingDao.getById(1L)).thenReturn(Optional.of(training));
@@ -113,7 +129,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testGetById_notFound() {
+    public void testGetById_notFound() {
         when(trainingDao.getById(1L)).thenReturn(Optional.empty());
 
         Optional<Training> result = trainingService.getById(1L);
@@ -123,7 +139,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testGetAll() {
+    public void testGetAll() {
         Training t1 = Training.builder().id(1L).trainingName("Yoga").build();
         Training t2 = Training.builder().id(2L).trainingName("Crossfit").build();
 
@@ -136,7 +152,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testGetByTrainerId() {
+    public void testGetByTrainerId() {
         Long trainerId = 10L;
         Training t1 = Training.builder().id(1L).trainerId(trainerId).build();
         Training t2 = Training.builder().id(2L).trainerId(trainerId).build();
@@ -150,7 +166,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testGetByTraineeId() {
+    public void testGetByTraineeId() {
         Long traineeId = 20L;
         Training t1 = Training.builder().id(1L).traineeId(traineeId).build();
         Training t2 = Training.builder().id(2L).traineeId(traineeId).build();
@@ -164,7 +180,7 @@ public class TrainingServiceTest {
     }
 
     @Test
-    void testGetByTrainingType() {
+    public void testGetByTrainingType() {
         Training t1 = Training.builder().id(1L).trainingType(TrainingType.STRENGTH).build();
         Training t2 = Training.builder().id(2L).trainingType(TrainingType.STRENGTH).build();
 
@@ -174,5 +190,13 @@ public class TrainingServiceTest {
 
         assertEquals(2, result.size());
         verify(trainingDao, times(1)).getByTrainingType(TrainingType.STRENGTH);
+    }
+
+    @Test
+    public void testGetByTrainingType_withNullType() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            trainingService.getByTrainingType(null);
+        });
+        assertEquals("TrainingType cannot be null", exception.getMessage());
     }
 }
