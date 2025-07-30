@@ -22,6 +22,11 @@ public class TraineeService {
     private UserCredentialService credentialService;
 
     public Trainee create(Trainee trainee) {
+        if (trainee == null) {
+            logger.error("create() called with null Trainee");
+            throw new IllegalArgumentException("Trainee cannot be null");
+        }
+
         logger.info("Creating trainee: {}", trainee);
 
         String username = credentialService.generateUniqueUsername(
@@ -37,6 +42,11 @@ public class TraineeService {
     }
 
     public Trainee update(Trainee trainee) {
+        if (trainee == null) {
+            logger.error("update() called with null Trainee");
+            throw new IllegalArgumentException("Trainee cannot be null");
+        }
+
         logger.info("Updating trainee: {}", trainee);
 
         Optional<Trainee> existingOpt = traineeDao.getById(trainee.getId());
@@ -52,8 +62,7 @@ public class TraineeService {
         return updated;
     }
 
-
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         logger.info("Deleting trainee with id: {}", id);
         Trainee deleted = traineeDao.deleteById(id);
 
@@ -64,7 +73,7 @@ public class TraineeService {
         }
     }
 
-    public Optional<Trainee> getById(Long id) {
+    public Optional<Trainee> getById(long id) {
         logger.info("Getting trainee with id: {}", id);
         return traineeDao.getById(id);
     }

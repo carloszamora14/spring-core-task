@@ -22,6 +22,11 @@ public class TrainerService {
     private UserCredentialService credentialService;
 
     public Trainer create(Trainer trainer) {
+        if (trainer == null) {
+            logger.error("create() called with null Trainer");
+            throw new IllegalArgumentException("Trainer cannot be null");
+        }
+
         logger.info("Creating trainer: {}", trainer);
 
         String username = credentialService.generateUniqueUsername(
@@ -37,6 +42,11 @@ public class TrainerService {
     }
 
     public Trainer update(Trainer trainer) {
+        if (trainer == null) {
+            logger.error("update() called with null Trainer");
+            throw new IllegalArgumentException("Trainer cannot be null");
+        }
+
         logger.info("Updating trainer: {}", trainer);
 
         Optional<Trainer> existingOpt = trainerDao.getById(trainer.getId());
@@ -52,7 +62,7 @@ public class TrainerService {
         return updated;
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         logger.info("Deleting trainer with id: {}", id);
         Trainer deleted = trainerDao.deleteById(id);
 
@@ -63,7 +73,7 @@ public class TrainerService {
         }
     }
 
-    public Optional<Trainer> getById(Long id) {
+    public Optional<Trainer> getById(long id) {
         logger.info("Getting trainer with id: {}", id);
         return trainerDao.getById(id);
     }

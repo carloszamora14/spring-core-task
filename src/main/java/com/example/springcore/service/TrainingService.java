@@ -20,6 +20,11 @@ public class TrainingService {
     private TrainingDao trainingDao;
 
     public Training create(Training training) {
+        if (training == null) {
+            logger.error("create() called with null Training");
+            throw new IllegalArgumentException("Training cannot be null");
+        }
+
         logger.info("Creating training: {}", training);
         Training created = trainingDao.create(training);
         logger.info("Training created successfully: {}", created);
@@ -27,6 +32,11 @@ public class TrainingService {
     }
 
     public Training update(Training training) {
+        if (training == null) {
+            logger.error("update() called with null Training");
+            throw new IllegalArgumentException("Training cannot be null");
+        }
+
         logger.info("Updating training: {}", training);
         Training updated = trainingDao.update(training);
 
@@ -39,7 +49,7 @@ public class TrainingService {
         return updated;
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         logger.info("Deleting training with id: {}", id);
         Training deleted = trainingDao.deleteById(id);
 
@@ -50,7 +60,7 @@ public class TrainingService {
         }
     }
 
-    public Optional<Training> getById(Long id) {
+    public Optional<Training> getById(long id) {
         logger.info("Getting training with id: {}", id);
         return trainingDao.getById(id);
     }
@@ -60,17 +70,22 @@ public class TrainingService {
         return trainingDao.getAll();
     }
 
-    public List<Training> getByTrainerId(Long trainerId) {
+    public List<Training> getByTrainerId(long trainerId) {
         logger.info("Getting trainings by trainerId: {}", trainerId);
         return trainingDao.getByTrainerId(trainerId);
     }
 
-    public List<Training> getByTraineeId(Long traineeId) {
+    public List<Training> getByTraineeId(long traineeId) {
         logger.info("Getting trainings by traineeId: {}", traineeId);
         return trainingDao.getByTraineeId(traineeId);
     }
 
     public List<Training> getByTrainingType(TrainingType trainingType) {
+        if (trainingType == null) {
+            logger.error("getByTrainingType() called with null trainingType");
+            throw new IllegalArgumentException("TrainingType cannot be null");
+        }
+
         logger.info("Getting trainings by trainingType: {}", trainingType);
         return trainingDao.getByTrainingType(trainingType);
     }
