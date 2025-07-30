@@ -1,2 +1,2 @@
-1,Mark,Johnson,markj,pass123,true,Fitness
-2,Anna,Williams,annaw,trainer789,true,Yoga
+Mark,Johnson,markj,pass123,true,Fitness
+Anna,Williams,annaw,trainer789,true,Yoga

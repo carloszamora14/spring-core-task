@@ -18,21 +18,24 @@ public class TraineeStorage extends InMemoryStorageImpl<Trainee> {
 
     @PostConstruct
     public void init() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-                Objects.requireNonNull(getClass().getResourceAsStream(filePath.replace("classpath:", "/")))))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(Objects.requireNonNull(getClass()
+                        .getResourceAsStream(filePath.replace("classpath:", "/")))))) {
+
             reader.lines().forEach(line -> {
                 String[] tokens = line.split(",");
-                if (tokens.length >= 8) {
+
+                if (tokens.length >= 7) {
                     Trainee t = Trainee.builder()
-                            .id(Long.parseLong(tokens[0]))
-                            .firstName(tokens[1])
-                            .lastName(tokens[2])
-                            .username(tokens[3])
-                            .password(tokens[4])
-                            .active(Boolean.parseBoolean(tokens[5]))
-                            .dateOfBirth(LocalDate.parse(tokens[6]))
-                            .address(tokens[7])
+                            .firstName(tokens[0])
+                            .lastName(tokens[1])
+                            .username(tokens[2])
+                            .password(tokens[3])
+                            .active(Boolean.parseBoolean(tokens[4]))
+                            .dateOfBirth(LocalDate.parse(tokens[5]))
+                            .address(tokens[6])
                             .build();
+
                     save(t);
                 }
             });

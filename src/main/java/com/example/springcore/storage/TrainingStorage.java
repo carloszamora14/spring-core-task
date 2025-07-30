@@ -20,20 +20,23 @@ public class TrainingStorage extends InMemoryStorageImpl<Training> {
 
     @PostConstruct
     public void init() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-                Objects.requireNonNull(getClass().getResourceAsStream(filePath.replace("classpath:", "/")))))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(Objects.requireNonNull(getClass()
+                        .getResourceAsStream(filePath.replace("classpath:", "/")))))) {
+
             reader.lines().forEach(line -> {
                 String[] tokens = line.split(",");
-                if (tokens.length >= 7) {
+
+                if (tokens.length >= 6) {
                     Training training = Training.builder()
-                            .id(Long.parseLong(tokens[0]))
-                            .traineeId(Long.parseLong(tokens[1]))
-                            .trainerId(Long.parseLong(tokens[2]))
-                            .trainingType(TrainingType.valueOf(tokens[3]))
-                            .trainingName(tokens[4])
-                            .date(LocalDateTime.parse(tokens[5]))
-                            .duration(Duration.parse(tokens[6]))
+                            .traineeId(Long.parseLong(tokens[0]))
+                            .trainerId(Long.parseLong(tokens[1]))
+                            .trainingType(TrainingType.valueOf(tokens[2]))
+                            .trainingName(tokens[3])
+                            .date(LocalDateTime.parse(tokens[4]))
+                            .duration(Duration.parse(tokens[5]))
                             .build();
+
                     save(training);
                 }
             });
