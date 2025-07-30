@@ -3,6 +3,8 @@ package com.example.springcore.service;
 import com.example.springcore.dao.TraineeDao;
 import com.example.springcore.dao.TrainerDao;
 import com.example.springcore.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.Set;
 @Service
 public class UserCredentialService {
 
+    private static final Logger logger = LogManager.getLogger(UserCredentialService.class);
+
     @Autowired
     private TraineeDao traineeDao;
 
@@ -22,28 +26,50 @@ public class UserCredentialService {
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public String generateUniqueUsername(String firstName, String lastName) {
-        String baseUsername = firstName.trim() + "." + lastName.trim();
-        baseUsername = baseUsername.toLowerCase();
-        Set<String> existingUsernames = new HashSet<>();
+        if (firstName == null || lastName == null) {
+            logger.error("generateUniqueUsername() called with null arguments: firstName={}, lastName={}", firstName, lastName);
+            throw new IllegalArgumentException("First name and last name cannot be null");
+        }
 
-        traineeDao.getAll().forEach(t -> existingUsernames.add(t.getUsername()));
-        trainerDao.getAll().forEach(t -> existingUsernames.add(t.getUsername()));
+        String baseUsername = formatBaseUsername(firstName, lastName);
+        Set<String> existingUsernames = getExistingUsernames();
+        return generateAvailableUsername(baseUsername, existingUsernames);
+    }
 
+    private String formatBaseUsername(String firstName, String lastName) {
+        return (firstName.trim() + "." + lastName.trim()).toLowerCase();
+    }
+
+    private Set<String> getExistingUsernames() {
+        Set<String> usernames = new HashSet<>();
+
+        traineeDao.getAll().forEach(t -> usernames.add(t.getUsername()));
+        trainerDao.getAll().forEach(t -> usernames.add(t.getUsername()));
+
+        return usernames;
+    }
+
+    private String generateAvailableUsername(String baseUsername, Set<String> existingUsernames) {
         if (!existingUsernames.contains(baseUsername)) {
             return baseUsername;
         }
 
         int suffix = 1;
-        String newUsername;
+        String candidate;
         do {
-            newUsername = baseUsername + suffix;
-            suffix += 1;
-        } while (existingUsernames.contains(newUsername));
+            candidate = baseUsername + suffix;
+            suffix++;
+        } while (existingUsernames.contains(candidate));
 
-        return newUsername;
+        return candidate;
     }
 
     public <T extends User> void updateUsername(T newUserData, T existingUser) {
+        if (newUserData == null || existingUser == null) {
+            logger.error("updateUsername() called with null arguments: newUserData={}, existingUser={}", newUserData, existingUser);
+            throw new IllegalArgumentException("User data cannot be null");
+        }
+
         boolean nameChanged =
                 !newUserData.getFirstName().trim().equalsIgnoreCase(existingUser.getFirstName().trim()) ||
                 !newUserData.getLastName().trim().equalsIgnoreCase(existingUser.getLastName().trim());
@@ -58,6 +84,11 @@ public class UserCredentialService {
     }
 
     public String generateRandomPassword(int length) {
+        if (length <= 0) {
+            logger.error("generateRandomPassword() called with non-positive length: {}", length);
+            throw new IllegalArgumentException("Password length must be greater than 0");
+        }
+
         SecureRandom random = new SecureRandom();
         StringBuilder builder = new StringBuilder(length);
 
